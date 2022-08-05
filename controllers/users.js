@@ -77,7 +77,7 @@ exports.login = async (req, res) => {
       { expiresIn: '1 days' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token: 'Bearer' + token });
+        res.json({ token: 'Bearer ' + token });
       }
     );
   } catch (error) {
