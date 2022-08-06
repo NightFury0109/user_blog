@@ -32,6 +32,8 @@ export const { setAuthStatus, setUser, setErrors } = auth.actions;
 
 export const userLogin = (userData) => {
   return async dispatch => {
+    dispatch(setErrors({}));
+
     try {
       const res = await axios.post(api + '/users/login', userData);
 
@@ -48,6 +50,7 @@ export const userLogin = (userData) => {
       return 0;
     } catch (error) {
       console.log(error);
+      dispatch(setErrors(error.response.data));
       return -1;
     }
   }
@@ -55,6 +58,8 @@ export const userLogin = (userData) => {
 
 export const createUser = (userData) => {
   return async dispatch => {
+    dispatch(setErrors({}));
+
     try {
       const res = await axios.post(api + '/users/register', userData);
 
@@ -64,6 +69,22 @@ export const createUser = (userData) => {
       dispatch(setErrors(error.response.data));
       return -1;
     }
+  }
+}
+
+export const logout = () => {
+  return async dispatch => {
+    dispatch(setErrors({}));
+
+    await localStorage.removeItem("token");
+    await setAuthToken(null);
+    dispatch(setUser({}));
+  }
+}
+
+export const clearErrors = () => {
+  return async dispatch => {
+    dispatch(setErrors({}));
   }
 }
 

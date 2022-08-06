@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Button } from 'antd';
 import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { userLogin } from '../../../redux/actions/auth';
@@ -11,6 +11,8 @@ import './style.css';
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { errors } = useSelector(state => state.auth);
 
   const [userData, setUserData] = useState({
     email: "",
@@ -26,7 +28,7 @@ const Login = () => {
 
     const res = await dispatch(userLogin(userData));
 
-    if (res === 0) navigate("/images");
+    if (res === 0) navigate("/posts");
   }
 
   return (
@@ -44,6 +46,7 @@ const Login = () => {
             type="email"
             onChange={onChange}
           />
+          {errors.email && <div className='text-danger'>{errors.email}</div>}
           <Input
             placeholder='Password'
             type="password"
@@ -52,10 +55,11 @@ const Login = () => {
             prefix={<AiOutlineUnlock />}
             value={userData.password}
             onChange={onChange}
-            className="my-4"
+            className="mt-4"
           />
+          {errors.password && <div className='text-danger'>{errors.password}</div>}
 
-          <Button size='large' type='primary' onClick={handleLogin}>Login</Button>
+          <Button size='large' type='primary' className='mt-4' onClick={handleLogin}>Login</Button>
         </form>
       </div>
     </div>

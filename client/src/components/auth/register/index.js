@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Button, Upload, Avatar } from 'antd';
 import { AiOutlineUser, AiOutlineUnlock, AiOutlineMail, AiOutlineLock } from 'react-icons/ai';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { createUser } from '../../../redux/actions/auth';
@@ -11,6 +11,8 @@ import './style.css';
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { errors } = useSelector(state => state.auth);
 
   const [userData, setUserData] = useState({
     name: "",
@@ -65,10 +67,11 @@ const Register = () => {
               <Avatar
                 shape="square"
                 id="avatar"
-                className="avt-rds mb-4"
+                className="avt-rds"
                 src="./img/avatar.png"
               />
             </Upload>
+            {errors.avatar && <div className='text-danger'>{errors.avatar}</div>}
           </div>
 
           <Input
@@ -78,8 +81,10 @@ const Register = () => {
             value={userData.name}
             name="name"
             type="text"
+            className="mt-4"
             onChange={onChange}
           />
+          {errors.name && <div className='text-danger'>{errors.name}</div>}
           <Input
             placeholder='Email'
             size='large'
@@ -88,8 +93,9 @@ const Register = () => {
             name="email"
             type="email"
             onChange={onChange}
-            className="my-4"
+            className="mt-4"
           />
+          {errors.email && <div className='text-danger'>{errors.email}</div>}
           <Input
             placeholder='Password'
             type="password"
@@ -98,8 +104,9 @@ const Register = () => {
             prefix={<AiOutlineLock />}
             value={userData.password}
             onChange={onChange}
-            className="mb-4"
+            className="mt-4"
           />
+          {errors.password && <div className='text-danger'>{errors.password}</div>}
           <Input
             placeholder='Confirm Password'
             type="password"
@@ -108,10 +115,11 @@ const Register = () => {
             prefix={<AiOutlineUnlock />}
             value={userData.password2}
             onChange={onChange}
-            className="mb-4"
+            className="mt-4"
           />
+          {errors.password2 && <div className='text-danger'>{errors.password2}</div>}
 
-          <Button size='large' type='primary' onClick={handleSignup}>Sign Up</Button>
+          <Button size='large' type='primary' className="mt-4" onClick={handleSignup}>Sign Up</Button>
         </form>
       </div>
     </div>
