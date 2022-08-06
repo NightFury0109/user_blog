@@ -1,0 +1,13 @@
+.auth-page {
+  width: 50%;
+  max-width: 500px;
+  min-width: 300px;
+}
+
+.avt-rds {
+  border-radius: 5px !important;
+  min-width: 72px;
+  min-height: 72px;
+  height: 15vh;
+  width: 15vh;
+}

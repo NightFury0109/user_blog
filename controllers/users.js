@@ -17,6 +17,11 @@ exports.register = async (req, res) => {
     return res.status(400).json(errors);
   }
 
+  if (!req.file) {
+    errors.avatar = "Choose your avatar";
+    return res.status(400).json(errors);
+  }
+
   try {
     const user = await User.findOne({ email: req.body.email });
 
@@ -28,7 +33,8 @@ exports.register = async (req, res) => {
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      avatar: req.file.path
     });
 
     const salt = await bcrypt.genSalt(10);
