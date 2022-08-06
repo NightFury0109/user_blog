@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import './style.css';
 
+import PostForm from './PostForm';
+
 const Posts = () => {
   const navigate = useNavigate();
 
@@ -13,7 +15,15 @@ const Posts = () => {
   }, [])
 
   return (
-    <div>Posts</div>
+    <div className="feed">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <PostForm />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

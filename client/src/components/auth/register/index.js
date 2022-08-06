@@ -83,6 +83,7 @@ const Register = () => {
             type="text"
             className="mt-4"
             onChange={onChange}
+            onPressEnter={handleSignup}
           />
           {errors.name && <div className='text-danger'>{errors.name}</div>}
           <Input
@@ -93,6 +94,7 @@ const Register = () => {
             name="email"
             type="email"
             onChange={onChange}
+            onPressEnter={handleSignup}
             className="mt-4"
           />
           {errors.email && <div className='text-danger'>{errors.email}</div>}
@@ -104,6 +106,7 @@ const Register = () => {
             prefix={<AiOutlineLock />}
             value={userData.password}
             onChange={onChange}
+            onPressEnter={handleSignup}
             className="mt-4"
           />
           {errors.password && <div className='text-danger'>{errors.password}</div>}
@@ -115,6 +118,7 @@ const Register = () => {
             prefix={<AiOutlineUnlock />}
             value={userData.password2}
             onChange={onChange}
+            onPressEnter={handleSignup}
             className="mt-4"
           />
           {errors.password2 && <div className='text-danger'>{errors.password2}</div>}

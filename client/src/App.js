@@ -4,7 +4,7 @@ import jwt_decode from 'jwt-decode';
 
 import './App.less';
 
-import { setUser, logout } from './redux/actions/auth';
+import { setUser, setAuthStatus, logout } from './redux/actions/auth';
 
 import store from './redux/store';
 import setAuthToken from './utils/setAuthToken';
@@ -22,6 +22,7 @@ if (localStorage.token) {
   const decoded = jwt_decode(localStorage.token);
   // Set user and isAuthenticated
   store.dispatch(setUser(decoded));
+  store.dispatch(setAuthStatus(true));
 
   // Check for expired token
   const currentTime = Date.now() / 1000;

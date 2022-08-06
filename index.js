@@ -13,9 +13,9 @@ const posts = require('./routes/api/posts');
 
 const app = express();
 
-const fileStorage = multer.diskStorage({
+const avatarStorage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, 'images');
+    callback(null, 'images/avatars');
   },
   filename: (req, file, callback) => {
     crypto.randomBytes(20, (err, buffer) => {
@@ -25,7 +25,19 @@ const fileStorage = multer.diskStorage({
   }
 });
 
-const fileFilter = (req, file, callback) => {
+const imgStorage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, 'images/uploads');
+  },
+  filename: (req, file, callback) => {
+    crypto.randomBytes(20, (err, buffer) => {
+      const name = Date.now() + buffer.toString('hex') + '.' + file.originalname.split('.').reverse()[0];
+      callback(null, name);
+    });
+  }
+});
+
+const imageFilter = (req, file, callback) => {
   const fileTypes = ['image/png', 'image/jpg', 'image/jpeg'];
   if (fileTypes.includes(file.mimetype)) {
     callback(null, true);
@@ -38,8 +50,11 @@ const fileFilter = (req, file, callback) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('avatar'));
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/users', multer({ storage: avatarStorage, fileFilter: imageFilter }).single('avatar'));
+app.use('/api/posts', multer({ storage: imgStorage, fileFilter: imageFilter }).single('image'));
+
+app.use('/images/avatars', express.static(path.join(__dirname, 'images/avatars')));
+app.use('/images/uploads', express.static(path.join(__dirname, 'images/uploads')));
 
 app.use(cors({
   origin: "*",

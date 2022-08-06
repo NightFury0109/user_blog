@@ -45,6 +45,7 @@ const Login = () => {
             name="email"
             type="email"
             onChange={onChange}
+            onPressEnter={handleLogin}
           />
           {errors.email && <div className='text-danger'>{errors.email}</div>}
           <Input
@@ -55,6 +56,7 @@ const Login = () => {
             prefix={<AiOutlineUnlock />}
             value={userData.password}
             onChange={onChange}
+            onPressEnter={handleLogin}
             className="mt-4"
           />
           {errors.password && <div className='text-danger'>{errors.password}</div>}

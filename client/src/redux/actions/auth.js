@@ -78,6 +78,7 @@ export const logout = () => {
 
     await localStorage.removeItem("token");
     await setAuthToken(null);
+    dispatch(setAuthStatus(false));
     dispatch(setUser({}));
   }
 }
