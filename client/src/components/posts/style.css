@@ -1,0 +1,13 @@
+.avatar-size {
+  width: 25px;
+}
+
+.img-preview {
+  border-radius: 5px !important;
+  width: 100%;
+  height: 100%;
+}
+
+.del-btn {
+  cursor: pointer;
+}

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
+
+const isAuth = require('../../middlewares/isAuth');
 
 const { getPosts, getPost, createPost, deletePost, comment, deleteComment } = require('../../controllers/posts');
 
@@ -19,21 +20,21 @@ router.get('/:id', getPost);
 // @route   POST api/posts
 // @desc    Create post
 // @access  Private
-router.post('/', passport.authenticate('jwt', { session: false }), createPost);
+router.post('/', isAuth, createPost);
 
 // @route   DELETE api/posts/:id
 // @desc    Delete post
 // @access  Private
-router.delete('/:id', passport.authenticate('jwt', { session: false }), deletePost);
+router.delete('/:id', isAuth, deletePost);
 
 // @route   POST api/posts/comment/:id
 // @desc    Add comment to post
 // @access  Private
-router.post('/comment/:id', passport.authenticate('jwt', { session: false }), comment);
+router.post('/comment/:id', isAuth, comment);
 
 // @route   DELETE api/posts/comment/:id/:comment_id
 // @desc    Remove comment from post
 // @access  Private
-router.delete('/comment/:id/:comment_id', passport.authenticate('jwt', { session: false }), deleteComment);
+router.delete('/comment/:id/:comment_id', isAuth, deleteComment);
 
 module.exports = router;

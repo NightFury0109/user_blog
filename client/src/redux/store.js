@@ -3,13 +3,15 @@ import { combineReducers } from "redux";
 // import logger from "redux-logger";
 
 import auth from "./actions/auth";
+import post from './actions/post';
 
 let middleware = getDefaultMiddleware => getDefaultMiddleware();
 // let middleware = getDefaultMiddleware => getDefaultMiddleware().concat(logger);
 
 
 const rootReducer = combineReducers({
-  auth: auth
+  auth: auth,
+  post: post
 });
 
 const store = configureStore({

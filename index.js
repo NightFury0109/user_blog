@@ -4,7 +4,6 @@ const crypto = require('crypto');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const passport = require('passport');
 const cors = require('cors');
 const multer = require('multer');
 
@@ -53,8 +52,8 @@ app.use(bodyParser.json());
 app.use('/api/users', multer({ storage: avatarStorage, fileFilter: imageFilter }).single('avatar'));
 app.use('/api/posts', multer({ storage: imgStorage, fileFilter: imageFilter }).single('image'));
 
-app.use('/images/avatars', express.static(path.join(__dirname, 'images/avatars')));
-app.use('/images/uploads', express.static(path.join(__dirname, 'images/uploads')));
+app.use('/images/avatars', express.static(path.join(__dirname, '/images/avatars')));
+app.use('/images/uploads', express.static(path.join(__dirname, '/images/uploads')));
 
 app.use(cors({
   origin: "*",
@@ -63,12 +62,6 @@ app.use(cors({
 
 // DB Config
 const db = require('./config/keys').mongoURI;
-
-// Passport middleware
-app.use(passport.initialize());
-
-// Passport Config
-require('./config/passport')(passport);
 
 // Use Routes
 app.use('/api/users', users);

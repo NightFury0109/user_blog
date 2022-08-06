@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
 import setAuthToken from '../../utils/setAuthToken';
 
-import { api } from '../../utils/api';
+import api from '../../utils/api';
 
 const initialState = {
   isAuthenticated: false,
@@ -30,20 +29,36 @@ const auth = createSlice({
 
 export const { setAuthStatus, setUser, setErrors } = auth.actions;
 
+export const loadUser = () => {
+  return async dispatch => {
+    try {
+      const res = await api.get('/users');
+
+      dispatch(setAuthStatus(true));
+      dispatch(setUser(res.data));
+
+      return 0;
+    } catch (error) {
+      console.log(error);
+      return -1;
+    }
+  }
+}
+
 export const userLogin = (userData) => {
   return async dispatch => {
     dispatch(setErrors({}));
 
     try {
-      const res = await axios.post(api + '/users/login', userData);
+      const res = await api.post('/users/login', userData);
 
       const { token } = res.data;
 
       localStorage.setItem("token", token);
-      setAuthToken(token);
 
       const decoded = jwt_decode(token);
 
+      await setAuthToken(token);
       dispatch(setAuthStatus(true));
       dispatch(setUser(decoded));
 
@@ -61,7 +76,7 @@ export const createUser = (userData) => {
     dispatch(setErrors({}));
 
     try {
-      const res = await axios.post(api + '/users/register', userData);
+      const res = await api.post('/users/register', userData);
 
       return 0;
     } catch (error) {
@@ -80,6 +95,7 @@ export const logout = () => {
     await setAuthToken(null);
     dispatch(setAuthStatus(false));
     dispatch(setUser({}));
+    // window.location.href = "/signin";
   }
 }
 

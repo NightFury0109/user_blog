@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs');
+
 // Post model
 const Post = require('../models/Post');
 // Validation
@@ -30,9 +33,15 @@ exports.createPost = async (req, res) => {
     return res.status(400).json(errors);
   }
 
+  if (!req.file) {
+    errors.file = "Choose an image";
+    return res.status(400).json(errors);
+  }
+
   try {
     const newPost = new Post({
-      text: req.body.text,
+      image: req.file.path,
+      text: req.body.comment,
       name: req.body.name,
       avatar: req.body.avatar,
       user: req.user.id
@@ -57,6 +66,14 @@ exports.deletePost = async (req, res) => {
 
     await post.remove();
 
+    const file_path = path.resolve(__dirname, '../', post.image);
+
+    try {
+      fs.unlinkSync(file_path);
+    } catch (error) {
+      console.log(error);
+    }
+
     res.json({ msg: "Deleted successfully" });
   } catch (error) {
     res.status(404).json({ msg: 'No post found' });
@@ -72,11 +89,17 @@ exports.comment = async (req, res) => {
     return res.status(400).json(errors);
   }
 
+  if (!req.file) {
+    errors.file = "Choose an image";
+    return res.status(400).json(errors);
+  }
+
   try {
     const post = await Post.findById(req.params.id);
 
     const newComment = {
-      text: req.body.text,
+      image: req.file.path,
+      text: req.body.comment,
       name: req.body.name,
       avatar: req.body.avatar,
       user: req.user.id
@@ -109,6 +132,15 @@ exports.deleteComment = async (req, res) => {
 
     // Get remove index
     const removeIndex = post.comments.map(item => item._id.toString()).indexOf(req.params.comment_id);
+
+    // console.log(post.comments[removeIndex].image)
+    const file_path = path.resolve(__dirname, '../', post.comments[removeIndex].image);
+
+    try {
+      fs.unlinkSync(file_path);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Splice comment out of array
     post.comments.splice(removeIndex, 1);

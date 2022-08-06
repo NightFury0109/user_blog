@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Input, Button, Avatar, Upload } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { createPost, loadPosts } from '../../redux/actions/post';
 
 const { TextArea } = Input;
 
@@ -8,24 +11,33 @@ const PostForm = () => {
     comment: "",
     image: null
   });
+  const dispatch = useDispatch();
+  const { user } = useSelector(state => state.auth);
 
-  const createPost = (e) => {
+  const handleCreatePost = async (e) => {
     e.preventDefault();
 
-    const { user } = this.props.auth;
+    const newPost = new FormData();
 
-    const newPost = {
-      text: this.state.text,
-      name: user.name,
-      avatar: user.avatar
-    };
+    newPost.append("image", postData.image);
+    newPost.append("comment", postData.comment);
+    newPost.append("name", user.name);
+    newPost.append("avatar", user.avatar);
 
-    this.props.addPost(newPost);
-    this.setState({ text: '' });
+    const res = await dispatch(createPost(newPost));
+
+    if (res === 0) {
+      dispatch(loadPosts());
+      setPostData({
+        ...postData, comment: ""
+      });
+
+      document.getElementById('image').firstChild.src = "./img/upload.png";
+    }
   };
 
   const onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    setPostData({ ...postData, [e.target.name]: e.target.value });
   };
 
   const props = {
@@ -34,7 +46,7 @@ const PostForm = () => {
       let reader = new FileReader();
 
       reader.onload = function () {
-        document.getElementById('avatar').firstChild.src = reader.result;
+        document.getElementById('image').firstChild.src = reader.result;
       }
 
       reader.readAsDataURL(file);
@@ -48,12 +60,12 @@ const PostForm = () => {
       <div className="card card-info">
         <div className="card-header bg-success text-white">Say Somthing...</div>
         <div className="card-body">
-          <form onSubmit={createPost}>
+          <form onSubmit={handleCreatePost}>
             <div className="d-flex align-items-start">
               <Upload {...props}>
                 <Avatar
                   shape="square"
-                  id="avatar"
+                  id="image"
                   className="avt-rds me-2"
                   src="./img/upload.png"
                 />
@@ -67,7 +79,7 @@ const PostForm = () => {
                 onChange={onChange}
               />
             </div>
-            <Button type="primary" className='mt-3'>
+            <Button type="primary" className='mt-3' onClick={handleCreatePost}>
               Submit
             </Button>
           </form>

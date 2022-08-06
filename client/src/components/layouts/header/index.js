@@ -19,8 +19,8 @@ const Header = () => {
   };
 
   const onClickLogout = () => {
-    dispatch(logout());
     navigate("/signin");
+    dispatch(logout());
   }
 
   let authItems;

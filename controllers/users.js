@@ -9,6 +9,16 @@ const validateLoginInput = require('../validation/login');
 // Load User model
 const User = require('../models/User');
 
+exports.loadUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+}
+
 exports.register = async (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -72,9 +82,9 @@ exports.login = async (req, res) => {
     }
 
     const payload = {
-      user: {
-        id: user.id
-      }
+      id: user.id,
+      name: user.name,
+      avatar: user.avatar
     };
 
     jwt.sign(
@@ -83,7 +93,7 @@ exports.login = async (req, res) => {
       { expiresIn: '1 days' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token: 'Bearer ' + token });
+        res.json({ token: token });
       }
     );
   } catch (error) {

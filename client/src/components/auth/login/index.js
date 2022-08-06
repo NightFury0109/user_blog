@@ -4,7 +4,7 @@ import { AiOutlineMail, AiOutlineUnlock } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { userLogin } from '../../../redux/actions/auth';
+import { userLogin, loadUser } from '../../../redux/actions/auth';
 
 import './style.css';
 
@@ -28,7 +28,10 @@ const Login = () => {
 
     const res = await dispatch(userLogin(userData));
 
-    if (res === 0) navigate("/posts");
+    if (res === 0) {
+      dispatch(loadUser());
+      navigate("/posts");
+    }
   }
 
   return (
