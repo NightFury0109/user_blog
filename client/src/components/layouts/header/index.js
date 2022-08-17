@@ -33,7 +33,7 @@ const Header = () => {
     )
   } else {
     authItems = (
-      <div>
+      <div className='d-flex align-items-center'>
         <NavLink to="/signin">
           <Button type='primary' shape="round" className='me-2' onClick={onClickAuthBtn}>
             Login
@@ -57,15 +57,15 @@ const Header = () => {
             <span className='text-white fw-bold'>UserBlog</span>
           </NavbarBrand>
 
-          <div className='text-end'>
-            <Nav className='d-flex align-items-center'>
-              <Nav.Link as={NavLink} to="/posts">
-                <div className="nav-item me-3">Posts</div>
-              </Nav.Link>
+          {/* <div className='text-end'> */}
+          <Nav className='d-flex flex-row align-items-center'>
+            <Nav.Link as={NavLink} to="/posts">
+              <div className="nav-item me-3">Posts</div>
+            </Nav.Link>
 
-              {authItems}
-            </Nav >
-          </div >
+            {authItems}
+          </Nav >
+          {/* </div > */}
 
         </div>
       </Navbar>
